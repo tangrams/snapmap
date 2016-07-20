@@ -1,0 +1,16 @@
+@charset 'utf-8';
+
+@import '_map';
+@import '_panel';
+/* VARIABLES */
+
+:root {
+
+}
+
+.mybutton {
+    background-color: purple;
+    right: 0;
+    position: absolute;
+    z-index: 2000;
+}
