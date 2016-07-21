@@ -19,7 +19,7 @@ class Map extends React.Component {
 
         // Create Leaflet map
         this.leaflet.setView([40.70531887544228, -74.00976419448853], 16);
-        const hash = new L.Hash(this.leaflet); // eslint-disable-line no-unused-vars
+        const hash = new L.Hash(this.leaflet);
 
         // Add Tangram Layer
         this.layer = Tangram.leafletLayer({

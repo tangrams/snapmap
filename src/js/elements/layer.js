@@ -2,6 +2,7 @@ import React from 'react';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import ButtonColor from './ButtonColor'
+import InputNumber from './InputNumber'
 
 const BASE_STYLES = ['polygons', 'lines', 'points', 'text']; 
 
@@ -16,25 +17,22 @@ class Layer extends React.Component {
     }
 
     render () {
-        let address = this.props.name;
         return (
             <div>
                 <div>{this.props.name}</div>
                 <div>
                     <DropdownButton bsSize="xsmall" title={this.props.config.base_style} id={`${this.props.name}-base_style`} onSelect={this.baseStyleChange}>
                         {BASE_STYLES.map( (style, i) => {
-                            if (style === this.props.config.base_style) {
-                                return (<MenuItem eventKey={style} key={i} active>{style}</MenuItem>);
-                            }
-                            else {
-                                return (<MenuItem eventKey={style} key={i}>{style}</MenuItem>);
-                            }
+                            return (
+                                <MenuItem eventKey={style}  key={i}
+                                    active={(style === this.props.config.base_style) ? "active" : ""}> {style} </MenuItem>
+                            );
                         })}
                     </DropdownButton>
-                    <ButtonColor color={this.props.config.color} address={'layers:'+address+':color'} update={this.props.update}/>
-                    {if (this.props.config.base_style === 'lines') {
-                        return (<input type="number" name="quantity" min="0" max="1000">);
-                    }}
+                    <ButtonColor color={this.props.config.color} address={'layers:'+this.props.name+':color'} update={this.props.update}/>
+                    {this.props.config.base_style === 'lines' && 
+                        <InputNumber width={this.props.config.width} address={'layers:'+this.props.name+':width'} update={this.props.update}/>
+                    }
                 </div>
             </div>
         );

@@ -29,7 +29,6 @@ class ButtonColor extends React.Component {
     }
 
     render() {
-
         const styles = ReactCSS({
           'default': {
                 color: {
@@ -62,6 +61,7 @@ class ButtonColor extends React.Component {
                 }
             }
         }, this.props, this.state);
+        
         return (
             <span>
                 <div style={ styles.swatch } onClick={ this.handleClick }>
