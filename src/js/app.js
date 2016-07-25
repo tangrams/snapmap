@@ -30,6 +30,18 @@ class Snapmap extends React.Component {
                                 value: 1,
                                 unit: 'px'
                             },
+                            size: { 
+                                value: 5,
+                                unit: 'px'
+                            },
+                            font: {
+                                size: { 
+                                    value: 16,
+                                    unit: 'px'
+                                },
+                                family: 'helvetica',
+                                weight: 100
+                            },
                             filter: []
                         },
                         water: {
@@ -39,6 +51,10 @@ class Snapmap extends React.Component {
                             color: '#333',
                             width: { 
                                 value: 1,
+                                unit: 'px'
+                            },
+                            size: { 
+                                value: 5,
                                 unit: 'px'
                             },
                             filter: []
@@ -52,6 +68,10 @@ class Snapmap extends React.Component {
                                 value: 1,
                                 unit: 'px'
                             },
+                            size: { 
+                                value: 5,
+                                unit: 'px'
+                            },
                             filter: []
                         },
                         roads: {
@@ -63,6 +83,10 @@ class Snapmap extends React.Component {
                                 value: 1,
                                 unit: 'px'
                             },
+                            size: { 
+                                value: 5,
+                                unit: 'px'
+                            },
                             filter: []
                         },
                         buildings: {
@@ -72,6 +96,10 @@ class Snapmap extends React.Component {
                             color: '#999',
                             width: { 
                                 value: 1,
+                                unit: 'px'
+                            },
+                            size: { 
+                                value: 5,
                                 unit: 'px'
                             },
                             filter: []
@@ -148,6 +176,8 @@ class Snapmap extends React.Component {
 
             if (oldLayer.base_style === "lines") {
                 newLayer.draw[oldLayer.base_style].width = oldLayer.width.value.toString() + oldLayer.width.unit;
+            } else if (oldLayer.base_style === "points") {
+                newLayer.draw[oldLayer.base_style].size = oldLayer.size.value.toString() + oldLayer.size.unit;
             }
             layers[layer] = newLayer;
         }
