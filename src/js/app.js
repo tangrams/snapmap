@@ -57,6 +57,14 @@ class Snapmap extends React.Component {
                                 value: 5,
                                 unit: 'px'
                             },
+                            font: {
+                                size: { 
+                                    value: 16,
+                                    unit: 'px'
+                                },
+                                family: 'helvetica',
+                                weight: 100
+                            },
                             filter: []
                         },
                         landuse: {
@@ -71,6 +79,14 @@ class Snapmap extends React.Component {
                             size: { 
                                 value: 5,
                                 unit: 'px'
+                            },
+                            font: {
+                                size: { 
+                                    value: 16,
+                                    unit: 'px'
+                                },
+                                family: 'helvetica',
+                                weight: 100
                             },
                             filter: []
                         },
@@ -87,6 +103,14 @@ class Snapmap extends React.Component {
                                 value: 5,
                                 unit: 'px'
                             },
+                            font: {
+                                size: { 
+                                    value: 16,
+                                    unit: 'px'
+                                },
+                                family: 'helvetica',
+                                weight: 100
+                            },
                             filter: []
                         },
                         buildings: {
@@ -101,6 +125,14 @@ class Snapmap extends React.Component {
                             size: { 
                                 value: 5,
                                 unit: 'px'
+                            },
+                            font: {
+                                size: { 
+                                    value: 16,
+                                    unit: 'px'
+                                },
+                                family: 'helvetica',
+                                weight: 100
                             },
                             filter: []
                         }
@@ -119,6 +151,9 @@ class Snapmap extends React.Component {
         //  -   This is ridiculus, should be a better way to do this,
         //      If I only have pointers... 
         switch (address.length) {
+            case 6:
+                newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]] = ev.value;
+                break;
             case 5:
                 newScene[address[0]][address[1]][address[2]][address[3]][address[4]] = ev.value;
                 break;
@@ -168,17 +203,28 @@ class Snapmap extends React.Component {
                 draw: {}
             }
 
-            newLayer.draw[oldLayer.base_style] = { order: 'global.order', color: oldLayer.color };
+            if (oldLayer.base_style === "text") {
+                console.log(oldLayer);
+                newLayer.draw[oldLayer.base_style] = { 
+                                                        font: {
+                                                            fill: oldLayer.color,
+                                                            size: oldLayer.font.size.value.toString() + oldLayer.font.size.unit
+                                                        }
+                                                    };
+            } else {
+                newLayer.draw[oldLayer.base_style] = { order: 'global.order', color: oldLayer.color };
 
-            if (oldLayer.style) {
-                newLayer.draw[oldLayer.base_style].style = oldLayer.style;
-            }
+                if (oldLayer.style) {
+                    newLayer.draw[oldLayer.base_style].style = oldLayer.style;
+                }
 
-            if (oldLayer.base_style === "lines") {
-                newLayer.draw[oldLayer.base_style].width = oldLayer.width.value.toString() + oldLayer.width.unit;
-            } else if (oldLayer.base_style === "points") {
-                newLayer.draw[oldLayer.base_style].size = oldLayer.size.value.toString() + oldLayer.size.unit;
+                if (oldLayer.base_style === "lines") {
+                    newLayer.draw[oldLayer.base_style].width = oldLayer.width.value.toString() + oldLayer.width.unit;
+                } else if (oldLayer.base_style === "points") {
+                    newLayer.draw[oldLayer.base_style].size = oldLayer.size.value.toString() + oldLayer.size.unit;
+                } 
             }
+            
             layers[layer] = newLayer;
         }
         yaml_string += yaml.safeDump( { layers: layers }, options);

@@ -63,6 +63,9 @@ class Layer extends React.Component {
                     {this.props.config.base_style === 'points' && 
                         <div style={styles.props}>Size:<InputNumber number={this.props.config.size} address={'layers:'+this.props.name+':size'} update={this.props.update}/></div>
                     }
+                    {this.props.config.base_style === 'text' && 
+                        <div style={styles.props}>Size:<InputNumber number={this.props.config.font.size} address={'layers:'+this.props.name+':font:size'} update={this.props.update}/></div>
+                    }
                 </Panel>
             </span>
         );
