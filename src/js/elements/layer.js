@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactCSS from 'reactcss'
+import { mapObject } from '../tools.js';
+import { BASE_STYLES, STYLES } from '../const.js';
 
 // Bootstrap components
 import Panel from 'react-bootstrap/lib/Panel';
@@ -11,8 +13,6 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import ButtonColor from '../components/ButtonColor'
 import InputNumber from '../components/InputNumber'
 
-const BASE_STYLES = ['polygons', 'lines', 'points', 'text']; 
-
 class Layer extends React.Component {
     constructor (props) {
         super(props);
@@ -22,10 +22,15 @@ class Layer extends React.Component {
         };
 
         this.baseStyleChange = this.baseStyleChange.bind(this);
+        this.styleChange = this.styleChange.bind(this);
     }
 
     baseStyleChange (ev) {
         this.props.update({ address: 'layers:'+this.props.name+':base_style' , value: ev});
+    }
+
+    styleChange (ev) {
+        this.props.update({ address: 'layers:'+this.props.name+':style' , value: ev});
     }
 
     render () {
@@ -43,7 +48,7 @@ class Layer extends React.Component {
             <span>
                 <NavItem onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
                 <Panel collapsible expanded={this.state.open}>
-                    <div style={styles.props}>Base Style:
+                    <div style={styles.props}>Type:
                         <DropdownButton bsSize="xsmall" title={this.props.config.base_style} id={`${this.props.name}-base_style`} onSelect={this.baseStyleChange}>
                             {BASE_STYLES.map( (style, i) => {
                                 return (
@@ -66,6 +71,15 @@ class Layer extends React.Component {
                     {this.props.config.base_style === 'text' && 
                         <div style={styles.props}>Size:<InputNumber number={this.props.config.font.size} address={'layers:'+this.props.name+':font:size'} update={this.props.update}/></div>
                     }
+
+                    <div style={styles.props}>style:
+                        <DropdownButton bsSize="xsmall" title={this.props.config.style} id={`${this.props.name}-style`} onSelect={this.styleChange}>
+                            { mapObject(STYLES[this.props.config.base_style], (style, result) => {
+                                return <MenuItem eventKey={style}  key={style}
+                                        active={(style === this.props.config.style) ? "active" : ""}> {style} </MenuItem>
+                            }) }
+                        </DropdownButton>
+                    </div>
                 </Panel>
             </span>
         );

@@ -1,15 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Map from './map';
-import Panel from './panel';
-
 import yaml from 'js-yaml';
+import { createObjectURL } from './tools.js';
+import { BASE_STYLES, STYLES } from './const.js';
 
-export function createObjectURL (string) {
-    let create = (window.URL && window.URL.createObjectURL) || (window.webkitURL && window.webkitURL.createObjectURL); // for Safari compatibliity
-    return create(new Blob([string]));
-}
+// Main Components
+import Map from './Map';
+import Panel from './Panel';
 
 class Snapmap extends React.Component {
     constructor (props) {
@@ -24,7 +22,7 @@ class Snapmap extends React.Component {
                         earth: {
                             source: 'mapzen',
                             base_style: 'polygons',
-                            style: undefined,
+                            style: 'none',
                             color: '#555',
                             width: { 
                                 value: 1,
@@ -42,12 +40,12 @@ class Snapmap extends React.Component {
                                 family: 'helvetica',
                                 weight: 100
                             },
-                            filter: []
+                            styles: []
                         },
                         water: {
                             source: 'mapzen',
                             base_style: 'polygons',
-                            style: undefined,
+                            style: 'none',
                             color: '#333',
                             width: { 
                                 value: 1,
@@ -65,12 +63,12 @@ class Snapmap extends React.Component {
                                 family: 'helvetica',
                                 weight: 100
                             },
-                            filter: []
+                            styles: []
                         },
                         landuse: {
                             source: 'mapzen',
                             base_style: 'polygons',
-                            style: undefined,
+                            style: 'none',
                             color: '#666',
                             width: { 
                                 value: 1,
@@ -88,12 +86,12 @@ class Snapmap extends React.Component {
                                 family: 'helvetica',
                                 weight: 100
                             },
-                            filter: []
+                            styles: []
                         },
                         roads: {
                             source: 'mapzen',
                             base_style: 'lines',
-                            style: undefined,
+                            style: 'none',
                             color: '#FFF',
                             width: { 
                                 value: 1,
@@ -111,12 +109,12 @@ class Snapmap extends React.Component {
                                 family: 'helvetica',
                                 weight: 100
                             },
-                            filter: []
+                            styles: []
                         },
                         buildings: {
                             source: 'mapzen',
                             base_style: 'polygons',
-                            style: undefined,
+                            style: 'none',
                             color: '#999',
                             width: { 
                                 value: 1,
@@ -134,7 +132,7 @@ class Snapmap extends React.Component {
                                 family: 'helvetica',
                                 weight: 100
                             },
-                            filter: []
+                            styles: []
                         }
                     }
                 }
@@ -184,9 +182,7 @@ class Snapmap extends React.Component {
         };
 
         let yaml_string = "";
-
-        // Import
-        yaml_string += yaml.safeDump( { import: this.state.scene.import }, options);
+        let imports = [...this.state.scene.import];
 
         // Source
         yaml_string += yaml.safeDump( { sources: this.state.scene.sources }, options);
@@ -214,8 +210,20 @@ class Snapmap extends React.Component {
             } else {
                 newLayer.draw[oldLayer.base_style] = { order: 'global.order', color: oldLayer.color };
 
-                if (oldLayer.style) {
-                    newLayer.draw[oldLayer.base_style].style = oldLayer.style;
+                if (oldLayer.style !== 'none') {
+                    newLayer.draw[oldLayer.base_style].style = oldLayer.base_style + '-' + oldLayer.style;
+                    console.log(STYLES[oldLayer.base_style])
+                    console.log(STYLES[oldLayer.base_style][oldLayer.style])
+
+                    if (STYLES[oldLayer.base_style][oldLayer.style]) {
+                        let url = STYLES[oldLayer.base_style][oldLayer.style].url;
+                        console.log(url)
+                        if (url && url !== '') {
+                            if (imports.indexOf(url) === -1 ) {
+                                imports.push(url);
+                            }
+                        }
+                    }
                 }
 
                 if (oldLayer.base_style === "lines") {
@@ -228,6 +236,9 @@ class Snapmap extends React.Component {
             layers[layer] = newLayer;
         }
         yaml_string += yaml.safeDump( { layers: layers }, options);
+
+        // Import
+        yaml_string += yaml.safeDump( { import: imports }, options);
 
         console.log(yaml_string);
         

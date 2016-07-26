@@ -1,4 +1,5 @@
 import React from 'react';
+import { mapObject } from './tools.js';
 
 // Bootstrap components
 import Nav from 'react-bootstrap/lib/Nav';
@@ -10,12 +11,6 @@ import SubPanel from './components/SubPanel';
 import Layer from './elements/layer';
 
 var Menu = require('react-burger-menu').slide;
-
-function mapObject(object, callback) {
-    return Object.keys(object).map(function (key) {
-        return callback(key, object[key]);
-    });
-}
 
 class Panel extends React.Component {
     constructor (props) {
@@ -31,9 +26,9 @@ class Panel extends React.Component {
                     <SubPanel eventKey={3} name='Lights:'></SubPanel>
                     <SubPanel eventKey={4} name='Layers:'>
                         <Nav bsStyle="pills" stacked activeKey={1}>
-                            {mapObject(this.props.scene.layers, (key, result) => {
+                            { mapObject(this.props.scene.layers, (key, result) => {
                                 return <Layer key={key} name={key} config={result} update={this.props.update}/>;
-                            })}
+                            }) }
                         </Nav>
                     </SubPanel>
                 </Nav>
