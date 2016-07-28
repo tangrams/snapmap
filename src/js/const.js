@@ -484,3 +484,27 @@ export const STYLE_BLOCKS = {
     }, 
     text: {}
 };
+
+export const FILTER_BLOCKS = {
+    'none': {
+        url: ''
+    },
+    'grain': {
+        url: 'https://tangrams.github.io/blocks/filter/grain.yaml'
+    },
+    'grid': {
+        url: 'https://tangrams.github.io/blocks/filter/grid.yaml'
+    },
+    'hatch': {
+        url: 'https://tangrams.github.io/blocks/filter/hatch.yaml'
+    },
+    'height': {
+        url: 'https://tangrams.github.io/blocks/filter/height.yaml'
+    },
+    'lut': {
+        url: 'https://tangrams.github.io/blocks/filter/lut.yaml'
+    },
+    'lut': {
+        url: 'https://tangrams.github.io/blocks/filter/tv.yaml'
+    }
+};
