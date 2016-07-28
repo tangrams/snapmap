@@ -2,143 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import yaml from 'js-yaml';
-import { createObjectURL } from './tools.js';
-import { BASE_STYLES, STYLES } from './const.js';
+import { VECTOR_SOURCE_NAME, STYLES, TEMPLATES, LAYERS_TEMPLATE, DEFAULT_SCENE, STYLE_BLOCKS } from './const';
+import { createObjectURL, dumpStyle } from './tools';
+
 
 // Main Components
 import Map from './Map';
-import Panel from './Panel';
+import MainPanel from './MainPanel';
 
 class Snapmap extends React.Component {
     constructor (props) {
         super(props);
 
-        this.state = {
-            scene: {
-                import: [ 'https://tangrams.github.io/blocks/global.yaml' ],
-                sources: { mapzen: { type: 'TopoJSON', url: 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson'} },
-                camera: { type: 'flat' },
-                layers: {
-                        earth: {
-                            source: 'mapzen',
-                            base_style: 'polygons',
-                            style: 'none',
-                            color: '#555',
-                            width: { 
-                                value: 1,
-                                unit: 'px'
-                            },
-                            size: { 
-                                value: 5,
-                                unit: 'px'
-                            },
-                            font: {
-                                size: { 
-                                    value: 16,
-                                    unit: 'px'
-                                },
-                                family: 'helvetica',
-                                weight: 100
-                            },
-                            styles: []
-                        },
-                        water: {
-                            source: 'mapzen',
-                            base_style: 'polygons',
-                            style: 'none',
-                            color: '#333',
-                            width: { 
-                                value: 1,
-                                unit: 'px'
-                            },
-                            size: { 
-                                value: 5,
-                                unit: 'px'
-                            },
-                            font: {
-                                size: { 
-                                    value: 16,
-                                    unit: 'px'
-                                },
-                                family: 'helvetica',
-                                weight: 100
-                            },
-                            styles: []
-                        },
-                        landuse: {
-                            source: 'mapzen',
-                            base_style: 'polygons',
-                            style: 'none',
-                            color: '#666',
-                            width: { 
-                                value: 1,
-                                unit: 'px'
-                            },
-                            size: { 
-                                value: 5,
-                                unit: 'px'
-                            },
-                            font: {
-                                size: { 
-                                    value: 16,
-                                    unit: 'px'
-                                },
-                                family: 'helvetica',
-                                weight: 100
-                            },
-                            styles: []
-                        },
-                        roads: {
-                            source: 'mapzen',
-                            base_style: 'lines',
-                            style: 'none',
-                            color: '#FFF',
-                            width: { 
-                                value: 1,
-                                unit: 'px'
-                            },
-                            size: { 
-                                value: 5,
-                                unit: 'px'
-                            },
-                            font: {
-                                size: { 
-                                    value: 16,
-                                    unit: 'px'
-                                },
-                                family: 'helvetica',
-                                weight: 100
-                            },
-                            styles: []
-                        },
-                        buildings: {
-                            source: 'mapzen',
-                            base_style: 'polygons',
-                            style: 'none',
-                            color: '#999',
-                            width: { 
-                                value: 1,
-                                unit: 'px'
-                            },
-                            size: { 
-                                value: 5,
-                                unit: 'px'
-                            },
-                            font: {
-                                size: { 
-                                    value: 16,
-                                    unit: 'px'
-                                },
-                                family: 'helvetica',
-                                weight: 100
-                            },
-                            styles: []
-                        }
-                    }
-                }
-            }
+        this.state = { scene: DEFAULT_SCENE };
 
-            this.update = this.update.bind(this);
+        this.update = this.update.bind(this);
     }
 
     update (ev) {
@@ -184,60 +62,55 @@ class Snapmap extends React.Component {
         let yaml_string = "";
         let imports = [...this.state.scene.import];
 
-        // Source
-        yaml_string += yaml.safeDump( { sources: this.state.scene.sources }, options);
+        // Add Source
+        let sources = {};
+        sources[VECTOR_SOURCE_NAME] = this.state.scene.sources.vector_tiles;
+        yaml_string += yaml.safeDump( { sources: sources }, options);
 
-        // Cameras
+        // Add Cameras
         yaml_string += yaml.safeDump( { cameras: { cam: this.state.scene.camera } }, options);
 
-        // Layers
+        // Add Ligth
+        yaml_string += yaml.safeDump( { 
+            lights: { 
+                dir: { 
+                    type: 'directional',
+                    direction: [.1, .5, -1],
+                    diffuse: .7,
+                    ambient: .5
+                } 
+            } 
+        }, options);
+
+        // Add Layers.  parse the scene and dump the layers in tangram-YAML form
         let layers = {};
         for (let layer in this.state.scene.layers) {
-            let oldLayer = this.state.scene.layers[layer];
-            let newLayer = {
-                data: { source: oldLayer.source },
-                draw: {}
+            let jsonCnf = this.state.scene.layers[layer];
+            let yamlCnf = {
+                data: { source: VECTOR_SOURCE_NAME },
+                draw: { }
             }
 
-            if (oldLayer.base_style === "text") {
-                console.log(oldLayer);
-                newLayer.draw[oldLayer.base_style] = { 
-                                                        font: {
-                                                            fill: oldLayer.color,
-                                                            size: oldLayer.font.size.value.toString() + oldLayer.font.size.unit
-                                                        }
-                                                    };
-            } else {
-                newLayer.draw[oldLayer.base_style] = { order: 'global.order', color: oldLayer.color };
-
-                if (oldLayer.style !== 'none') {
-                    newLayer.draw[oldLayer.base_style].style = oldLayer.base_style + '-' + oldLayer.style;
-                    console.log(STYLES[oldLayer.base_style])
-                    console.log(STYLES[oldLayer.base_style][oldLayer.style])
-
-                    if (STYLES[oldLayer.base_style][oldLayer.style]) {
-                        let url = STYLES[oldLayer.base_style][oldLayer.style].url;
-                        console.log(url)
-                        if (url && url !== '') {
-                            if (imports.indexOf(url) === -1 ) {
-                                imports.push(url);
-                            }
-                        }
+            // Iterate through all the types of possible templates
+            for (let template of TEMPLATES) {
+                if (jsonCnf[template].enable) {
+                    yamlCnf.draw['_'+template] = dumpStyle(template, LAYERS_TEMPLATE[layer], jsonCnf, imports);
+                    if (layer === 'buildings' && jsonCnf.extrude) {
+                        yamlCnf.draw['_'+template]['extrude'] = true;
                     }
                 }
 
-                if (oldLayer.base_style === "lines") {
-                    newLayer.draw[oldLayer.base_style].width = oldLayer.width.value.toString() + oldLayer.width.unit;
-                } else if (oldLayer.base_style === "points") {
-                    newLayer.draw[oldLayer.base_style].size = oldLayer.size.value.toString() + oldLayer.size.unit;
-                } 
+                
             }
-            
-            layers[layer] = newLayer;
+
+            // TODO:
+            //    - FILTERS
+
+            layers[layer] = yamlCnf;
         }
         yaml_string += yaml.safeDump( { layers: layers }, options);
 
-        // Import
+        // Add Import
         yaml_string += yaml.safeDump( { import: imports }, options);
 
         console.log(yaml_string);
@@ -247,7 +120,7 @@ class Snapmap extends React.Component {
 
     render () {
         return (<div>
-                    <Panel scene={this.state.scene} update={this.update}/> 
+                    <MainPanel scene={this.state.scene} update={this.update}/> 
                     <Map />
                 </div>);
     }

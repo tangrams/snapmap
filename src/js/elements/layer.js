@@ -1,17 +1,20 @@
 import React from 'react';
 import ReactCSS from 'reactcss'
-import { mapObject } from '../tools.js';
-import { BASE_STYLES, STYLES } from '../const.js';
+
+import { TEMPLATES, LAYERS_TEMPLATE } from '../const.js';
 
 // Bootstrap components
 import Panel from 'react-bootstrap/lib/Panel';
 import NavItem from 'react-bootstrap/lib/NavItem';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
+
+// Tangram Style elements
+import Polygon from './styles/Polygon'
+import Line from './styles/Line'
+import Point from './styles/Point'
+import Text from './styles/Text'
 
 // Custom components
-import ButtonColor from '../components/ButtonColor'
-import InputNumber from '../components/InputNumber'
+import ButtonToggle from '../components/ButtonToggle'
 
 class Layer extends React.Component {
     constructor (props) {
@@ -21,12 +24,7 @@ class Layer extends React.Component {
             open: false
         };
 
-        this.baseStyleChange = this.baseStyleChange.bind(this);
         this.styleChange = this.styleChange.bind(this);
-    }
-
-    baseStyleChange (ev) {
-        this.props.update({ address: 'layers:'+this.props.name+':base_style' , value: ev});
     }
 
     styleChange (ev) {
@@ -48,38 +46,25 @@ class Layer extends React.Component {
             <span>
                 <NavItem onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
                 <Panel collapsible expanded={this.state.open}>
-                    <div style={styles.props}>Type:
-                        <DropdownButton bsSize="xsmall" title={this.props.config.base_style} id={`${this.props.name}-base_style`} onSelect={this.baseStyleChange}>
-                            {BASE_STYLES.map( (style, i) => {
-                                return (
-                                    <MenuItem eventKey={style}  key={i}
-                                        active={(style === this.props.config.base_style) ? "active" : ""}> {style} </MenuItem>
-                                );
-                            })}
-                        </DropdownButton>
-                    </div>
-                    
-                    <div style={styles.props}>Color:
-                        <ButtonColor color={this.props.config.color} address={'layers:'+this.props.name+':color'} update={this.props.update}/>
-                    </div>
-                    {this.props.config.base_style === 'lines' &&
-                        <div style={styles.props}>Width:<InputNumber number={this.props.config.width} address={'layers:'+this.props.name+':width'} update={this.props.update}/></div>
+                    { this.props.name === 'buildings' &&
+                        <div style={styles.props}> Extrude:<ButtonToggle value={this.props.config.extrude} address={this.props.address+':extrude'} update={this.props.update}/></div>
                     }
-                    {this.props.config.base_style === 'points' && 
-                        <div style={styles.props}>Size:<InputNumber number={this.props.config.size} address={'layers:'+this.props.name+':size'} update={this.props.update}/></div>
-                    }
-                    {this.props.config.base_style === 'text' && 
-                        <div style={styles.props}>Size:<InputNumber number={this.props.config.font.size} address={'layers:'+this.props.name+':font:size'} update={this.props.update}/></div>
-                    }
+                    { TEMPLATES.map( (type) => {
+                        let style = LAYERS_TEMPLATE[this.props.name][type].style;
 
-                    <div style={styles.props}>style:
-                        <DropdownButton bsSize="xsmall" title={this.props.config.style} id={`${this.props.name}-style`} onSelect={this.styleChange}>
-                            { mapObject(STYLES[this.props.config.base_style], (style, result) => {
-                                return <MenuItem eventKey={style}  key={style}
-                                        active={(style === this.props.config.style) ? "active" : ""}> {style} </MenuItem>
-                            }) }
-                        </DropdownButton>
-                    </div>
+                        if (style === 'polygons') {
+                            return <Polygon key={type} name={type} address={this.props.address+':'+type} config={this.props.config[type]} update={this.props.update} />
+                        } else if (style === 'lines') {
+                            return <Line key={type} name={type} address={this.props.address+':'+type} config={this.props.config[type]} update={this.props.update} />
+                        } else if (style === 'points') {
+                            return <Point key={type} name={type} address={this.props.address+':'+type} config={this.props.config[type]} update={this.props.update} />
+                        } else if (style === 'text') {
+                            return <Text key={type} name={type} address={this.props.address+':'+type} config={this.props.config[type]} update={this.props.update} />
+                        } else {
+                            return <div>Error: {type+'-'+style}</div>
+                        }
+
+                    }) }
                 </Panel>
             </span>
         );

@@ -12,7 +12,7 @@ class ButtonColor extends React.Component {
 
         this.handleClick = this.handleClick.bind(this);
         this.handleClose = this.handleClose.bind(this);
-        this.colorChange = this.colorChange.bind(this);
+        this.valueChange = this.valueChange.bind(this);
     }
   
     handleClick () {
@@ -23,7 +23,7 @@ class ButtonColor extends React.Component {
         this.setState({ displayColorPicker: false })
     }
 
-    colorChange (color) {
+    valueChange (color) {
         this.setState({ color: color.hex })
         this.props.update({ address: this.props.address, value: color.hex});
     }
@@ -69,7 +69,7 @@ class ButtonColor extends React.Component {
                 </div>
                 { this.state.displayColorPicker ? <div style={ styles.popover }>
                     <div style={ styles.cover } onClick={ this.handleClose }/>
-                        <SketchPicker color={ this.state.color } onChange={ this.colorChange }/>
+                        <SketchPicker color={ this.state.color } onChange={ this.valueChange }/>
                     </div> : null }
             </span>
         );
