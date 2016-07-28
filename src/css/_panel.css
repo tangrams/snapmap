@@ -39,9 +39,18 @@
 .bm-item-list {
     color: #b8b7ad;
     padding: 0.8em;
+    overflow-y: scroll;
 }
 
 /* Styling of overlay */
 .bm-overlay {
     background: rgba(0, 0, 0, 0.3);
+}
+
+.panel {
+    margin-bottom: 0px;
+}
+
+.panel-body {
+    padding: 5px;
 }

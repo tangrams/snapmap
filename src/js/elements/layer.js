@@ -34,12 +34,11 @@ class Layer extends React.Component {
     render () {
         const styles = ReactCSS({
             'default': {
-                props: {
-                        padding: '3px',
+                text: {
                         fontSize: '13px',
                         color: 'black'
                     }
-                }
+            }
         }, this.props, this.state);
 
         return (
@@ -47,7 +46,10 @@ class Layer extends React.Component {
                 <NavItem onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
                 <Panel collapsible expanded={this.state.open}>
                     { this.props.name === 'buildings' &&
-                        <div style={styles.props}> Extrude:<ButtonToggle value={this.props.config.extrude} address={this.props.address+':extrude'} update={this.props.update}/></div>
+                        <div> 
+                            <span style={styles.text}> Extrude:</span>
+                            <ButtonToggle value={this.props.config.extrude} address={this.props.address+':extrude'} update={this.props.update}/>
+                        </div>
                     }
                     { TEMPLATES.map( (type) => {
                         let style = LAYERS_TEMPLATE[this.props.name][type].style;

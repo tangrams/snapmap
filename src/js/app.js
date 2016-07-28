@@ -99,8 +99,6 @@ class Snapmap extends React.Component {
                         yamlCnf.draw['_'+template]['extrude'] = true;
                     }
                 }
-
-                
             }
 
             // TODO:

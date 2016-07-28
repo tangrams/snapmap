@@ -4,6 +4,7 @@ import { mapObject } from '../../tools.js';
 import { STYLE_BLOCKS } from '../../const.js';
 
 // Bootstrap components
+import Panel from 'react-bootstrap/lib/Panel';
 import DropdownButton from 'react-bootstrap/lib/DropdownButton';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 
@@ -20,27 +21,44 @@ class Polygon extends React.Component {
     render () {
         const styles = ReactCSS({
             'default': {
-                props: {
-                        padding: '3px',
-                        fontSize: '13px',
-                        color: 'black'
-                    }
+                text: {
+                    fontSize: '13px',
+                    color: 'black'
+                },
+                type: {
+                    textAlign: 'right'
+                },
+                type_label: {
+                    color: '#337ab7',
+                    fontSize: '14px',
+                    paddingRight: '5px'
                 }
+            }
         }, this.props, this.state);
 
         return (
             <div>
-                <p>{this.props.name}</p>
-
-                <div style={styles.props}>Visible:
-                    <ButtonToggle value={this.props.config.enable} address={this.props.address+':enable'} update={this.props.update}/>
+                <div style={styles.type}>
+                    <span style={styles.type_label}>{this.props.name}</span>
+                    <ButtonToggle
+                        value={this.props.config.enable} 
+                        address={this.props.address+':enable'} 
+                        update={this.props.update}
+                        labels_style={['default', 'default']}
+                        labels_type='glyphicon'
+                        labels={['eye-close', 'eye-open']}/> 
                 </div>
-
-                <div style={styles.props}>Color:
-                    <ButtonColor color={this.props.config.color} address={'layers:'+this.props.name+':color'} update={this.props.update}/>
-                </div>
-                
-                <div style={styles.props}>Size:<InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/></div>
+                <Panel collapsible expanded={this.props.config.enable}>
+                    <div>
+                        <span style={styles.text}>Color:</span>
+                        <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
+                    </div>
+                    
+                    <div>
+                        <span style={styles.text}>Size:</span>
+                        <InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/>
+                    </div>
+                </Panel>
             </div>
         );
     }
