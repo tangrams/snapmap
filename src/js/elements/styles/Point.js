@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactCSS from 'reactcss'
 import { mapObject } from '../../tools.js';
 import { STYLE_BLOCKS } from '../../const.js';
 
@@ -25,27 +24,10 @@ class Polygon extends React.Component {
     }
 
     render () {
-        const styles = ReactCSS({
-            'default': {
-                text: {
-                    fontSize: '13px',
-                    color: 'black'
-                },
-                type: {
-                    textAlign: 'right'
-                },
-                type_label: {
-                    color: '#337ab7',
-                    fontSize: '14px',
-                    paddingRight: '5px'
-                }
-            }
-        }, this.props, this.state);
-
         return (
             <div>
-                <div style={styles.type}>
-                    <span style={styles.type_label}>{this.props.name}</span>
+                <div className='element_type'>
+                    <span className='element_type_label'>{this.props.name}</span>
                     <ButtonToggle
                         value={this.props.config.enable} 
                         address={this.props.address+':enable'} 
@@ -56,20 +38,21 @@ class Polygon extends React.Component {
                 </div>
                 <Panel collapsible expanded={this.props.config.enable}>
                     <div>
-                        <span style={styles.text}>Color:</span>
+                        <span className='element_label'>Color:</span>
                         <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
                     </div>
 
                     <div>
-                        <span style={styles.text}>Size:</span>
+                        <span className='element_label'>Size:</span>
                         <InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/>
                     </div>
 
                     <div>
-                        <span style={styles.text}>Style:</span>
+                        <span className='element_label'>Style:</span>
                         <DropdownButton bsSize="xsmall" title={this.props.config.style} id={`${this.props.name}-style`} onSelect={this.styleChange}>
                             { mapObject(STYLE_BLOCKS.points, (style, result) => {
-                                return <MenuItem eventKey={style}  key={style}
+                                return <MenuItem 
+                                        key={style}
                                         active={(style === this.props.config.style) ? "active" : ""}> {style} </MenuItem>
                             }) }
                         </DropdownButton>

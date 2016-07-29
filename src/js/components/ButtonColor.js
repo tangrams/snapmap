@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactCSS from 'reactcss';
 import { SketchPicker } from 'react-color';
 
 class ButtonColor extends React.Component {
@@ -29,49 +28,47 @@ class ButtonColor extends React.Component {
     }
 
     render() {
-        const styles = ReactCSS({
-            'default': {
-                color: {
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '2px',
-                    background: `${this.props.color}`
-                },
-                swatch: {
-                    width: '36px',
-                    height: '22px',
-                    padding: '5px',
-                    transform: 'translate(0px,7px)',
-                    background: '#fff',
-                    borderRadius: '1px',
-                    boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
-                    display: 'inline-block',
-                    cursor: 'pointer'
-                },
-                popover: {
-                    position: 'absolute',
-                    zIndex: '2'
-                },
-                cover: {
-                    position: 'fixed',
-                    top: '0',
-                    right: '0',
-                    bottom: '0',
-                    left: '0'
-                }
+        const styles = {
+            color: {
+                width: '100%',
+                height: '100%',
+                borderRadius: '2px',
+                background: `${this.props.color}`
+            },
+            swatch: {
+                width: '36px',
+                height: '22px',
+                padding: '5px',
+                transform: 'translate(0px,7px)',
+                background: '#fff',
+                borderRadius: '1px',
+                boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+                display: 'inline-block',
+                cursor: 'pointer'
+            },
+            popover: {
+                position: 'absolute',
+                zIndex: '2'
+            },
+            cover: {
+                position: 'fixed',
+                top: '0',
+                right: '0',
+                bottom: '0',
+                left: '0'
             }
-        }, this.props, this.state);
-        
+        }
+
         return (
             <span>
-                <div style={ styles.swatch } onClick={ this.handleClick }>
-                    <div style={ styles.color } />
+                <div style={styles.swatch} onClick={ this.handleClick }>
+                    <div style={styles.color} />
                 </div>
                 
-                { this.state.displayColorPicker ? <div style={ styles.popover }>
-                    <div style={ styles.cover } onClick={ this.handleClose }/>
+                {this.state.displayColorPicker ? <div style={styles.popover}>
+                    <div style={styles.cover} onClick={ this.handleClose }/>
                         <SketchPicker color={ this.state.color } onChange={ this.valueChange }/>
-                    </div> : null }
+                    </div> : null}
             </span>
         );
     }

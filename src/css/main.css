@@ -2,8 +2,9 @@
 
 @import '_map';
 @import '_panel';
-/* VARIABLES */
+@import '_elements';
 
+/* VARIABLES */
 :root {
 
 }

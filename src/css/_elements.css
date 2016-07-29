@@ -1,0 +1,14 @@
+.labels {
+    font-size: 13px;
+    color: black;
+} 
+
+.element_type {
+    text-align: right;
+}
+
+.element_type_label {
+    color: #337ab7;
+    font-size: 14px;
+    padding-right: 5px;
+}

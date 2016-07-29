@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactCSS from 'reactcss'
 
 import { TEMPLATES, LAYERS_TEMPLATE } from '../const.js';
 
@@ -32,22 +31,13 @@ class Layer extends React.Component {
     }
 
     render () {
-        const styles = ReactCSS({
-            'default': {
-                text: {
-                        fontSize: '13px',
-                        color: 'black'
-                    }
-            }
-        }, this.props, this.state);
-
         return (
             <span>
                 <NavItem onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
                 <Panel collapsible expanded={this.state.open}>
                     { this.props.name === 'buildings' &&
                         <div> 
-                            <span style={styles.text}> Extrude:</span>
+                            <span className='element_label'> Extrude:</span>
                             <ButtonToggle value={this.props.config.extrude} address={this.props.address+':extrude'} update={this.props.update}/>
                         </div>
                     }

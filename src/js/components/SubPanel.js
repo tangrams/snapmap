@@ -16,7 +16,7 @@ class SubPanel extends React.Component {
     render() {
         return (
             <span>
-                <NavItem onClick={ ()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
+                <NavItem onClick={()=> this.setState({ open: !this.state.open })}>{this.props.name}</NavItem>
                 <Panel collapsible expanded={this.state.open}>
                     {this.props.children}
                 </Panel>

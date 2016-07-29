@@ -20,10 +20,10 @@ class MainPanel extends React.Component {
     render () {
         return (
             <Menu noOverlay>
-                <Nav bsStyle="pills" stacked activeKey={1}>
-                    <SubPanel eventKey={1} name='Cameras:'></SubPanel>
-                    <SubPanel eventKey={2} name='Layers:'>
-                        <Nav bsStyle="pills" stacked activeKey={1}>
+                <Nav>
+                    <SubPanel name='Cameras:'></SubPanel>
+                    <SubPanel name='Layers:'>
+                        <Nav>
                             { mapObject(this.props.scene.layers, (key, result) => {
                                 return <Layer key={key} address={'layers:'+key} name={key} config={result} update={this.props.update}/>;
                             }) }
