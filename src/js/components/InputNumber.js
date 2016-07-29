@@ -40,7 +40,7 @@ class InputNumber extends React.Component {
                 <input type='number' is='input' value={this.props.number.value} min='0' max='1000' onChange={this.valueChange}/>
                 <DropdownButton bsSize="xsmall" title={this.props.number.unit} id={`${this.props.address}-unit`} onSelect={this.unitChange}>
                     {UNITS.map((unit, i) => {
-                        return (<MenuItem key={i} active={(unit === this.props.number.unit)? "active" : ""} >{unit}</MenuItem>);
+                        return (<MenuItem key={i} active={(unit === this.props.number.unit)} >{unit}</MenuItem>);
                     })}
                 </DropdownButton>
             </span>

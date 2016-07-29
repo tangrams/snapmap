@@ -53,7 +53,8 @@ class Polygon extends React.Component {
                             { mapObject(STYLE_BLOCKS.points, (style, result) => {
                                 return <MenuItem 
                                         key={style}
-                                        active={(style === this.props.config.style) ? "active" : ""}> {style} </MenuItem>
+                                        eventKey={style}
+                                        active={(style === this.props.config.style)}> {style} </MenuItem>
                             }) }
                         </DropdownButton>
                     </div>
