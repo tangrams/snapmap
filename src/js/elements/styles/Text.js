@@ -35,7 +35,6 @@ class Polygon extends React.Component {
                         <span className='element_label'>Color:</span>
                         <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
                     </div>
-                    
                     <div>
                         <span className='element_label'>Size:</span>
                         <InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/>

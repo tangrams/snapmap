@@ -41,7 +41,6 @@ class Polygon extends React.Component {
                         <span className='element_label'>Color:</span>
                         <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
                     </div>
-
                     <div> 
                         <span className='element_label'>Style:</span>
                         <DropdownButton bsSize='xsmall' title={this.props.config.style} id={`${this.props.name}-style`} onSelect={this.styleChange}>
@@ -49,7 +48,7 @@ class Polygon extends React.Component {
                                 return <MenuItem 
                                         key={style}
                                         eventKey={style}
-                                        active={(style === this.props.config.style)}> {style} </MenuItem>
+                                        active={(style === this.props.config.style)}>{style}</MenuItem>
                             }) }
                         </DropdownButton>
                     </div>

@@ -47,7 +47,8 @@ class ButtonColor extends React.Component {
                 cursor: 'pointer'
             },
             popover: {
-                position: 'absolute',
+                // position: 'absolute',
+                transform: 'translate(0px,0px)',
                 zIndex: '2'
             },
             cover: {
