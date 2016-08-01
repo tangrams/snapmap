@@ -64,14 +64,19 @@
   },
   "dependencies": {
     "js-yaml": "^3.6.1",
-    "leaflet": "1.0.0-rc.1",
-    "leaflet-hash": "0.2.1",
-    "react": "^0.14.8",
+    "leaflet": "^1.0.0-rc.1",
+    "leaflet-hash": "^0.2.1",
+    "react": "^15.3.0",
     "react-bootstrap": "^0.29.4",
     "react-burger-menu": "^1.9.8",
     "react-color": "^2.2.2",
-    "react-dom": "^0.14.8",
+    "react-dom": "^15.3.0",
     "whatwg-fetch": "^0.11.0"
+  },
+  "resolve": {
+    "alias": {
+      "react": "path.resolve('./node_modules/react')"
+    }
   },
   "browserify-shim": {
     "tangram": "global:Tangram"

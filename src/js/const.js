@@ -6,6 +6,8 @@ export const VECTOR_SOURCE_URL = 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.
 
 export const STYLES = ['polygons', 'lines', 'points', 'text', 'raster'];
 export const TEMPLATES = ['fill', 'border', 'label'];
+export const CAMERA_TYPES = ['perspective', 'isometric'];
+export const LIGHT_TYPES = ['directional', 'point', 'spot'];
 
 export const LAYERS_TEMPLATE = {
     water: {
@@ -137,6 +139,15 @@ export const DEFAULT_SCENE = {
     },
     camera: { 
         type: 'perspective' 
+    },
+    light: {
+        type: 'directional',
+        direction: [.1, .5, -1],
+        ambient: '#878886',
+        diffuse: '#BFC1BE'
+    },
+    filters: {
+
     },
     layers: {
         earth: {
@@ -486,9 +497,6 @@ export const STYLE_BLOCKS = {
 };
 
 export const FILTER_BLOCKS = {
-    'none': {
-        url: ''
-    },
     'grain': {
         url: 'https://tangrams.github.io/blocks/filter/grain.yaml'
     },
@@ -504,7 +512,46 @@ export const FILTER_BLOCKS = {
     'lut': {
         url: 'https://tangrams.github.io/blocks/filter/lut.yaml'
     },
-    'lut': {
+    'tv': {
         url: 'https://tangrams.github.io/blocks/filter/tv.yaml'
     }
 };
+
+export const FILTERS_LUTS = {
+    xPro: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0001.png'
+    },
+    Walden: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0002.png'
+    },
+    Toaster: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0003.png'
+    },
+    Sutro: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0004.png'
+    },
+    Nashville: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0005.png'
+    },
+    LordKelvin: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0006.png'
+    },
+    LomoFi: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0007.png'
+    },
+    InkWell: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0008.png'
+    },
+    Hefe: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0009.png'
+    },
+    Gotham: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0010.png'
+    },
+    EarlyBird: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0011.png'
+    },
+    Brannan: {
+        url: 'https://tangrams.github.io/blocks/filter/imgs/lut-0013.png'
+    },
+}

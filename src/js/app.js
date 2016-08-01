@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import yaml from 'js-yaml';
-import { VECTOR_SOURCE_NAME, STYLES, TEMPLATES, LAYERS_TEMPLATE, DEFAULT_SCENE, STYLE_BLOCKS } from './const';
-import { createObjectURL, dumpStyle } from './tools';
+import { VECTOR_SOURCE_NAME, STYLES, TEMPLATES, LAYERS_TEMPLATE, DEFAULT_SCENE } from './const';
+import { createObjectURL, dumpLayer, dumpStyle, dumpFilters } from './tools';
 
 
 // Main Components
@@ -17,6 +17,7 @@ class Snapmap extends React.Component {
         this.state = { scene: DEFAULT_SCENE };
 
         this.update = this.update.bind(this);
+        this.erase = this.erase.bind(this);
     }
 
     update (ev) {
@@ -54,9 +55,47 @@ class Snapmap extends React.Component {
         window.scene.load(createObjectURL(this.getYAML()));
     }
 
+    erase (ev) {
+        let address = ev.address.split(':');
+        let newScene = this.state.scene;
+
+        console.log(ev.address, address);
+
+        // TODO's:
+        //  -   This is ridiculus, should be a better way to do this,
+        //      If I only have pointers... 
+        switch (address.length) {
+            case 6:
+                delete newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]];
+                break;
+            case 5:
+                delete newScene[address[0]][address[1]][address[2]][address[3]][address[4]];
+                break;
+            case 4:
+                delete newScene[address[0]][address[1]][address[2]][address[3]];
+                break;
+            case 3:
+                delete newScene[address[0]][address[1]][address[2]];
+                break;
+            case 2:
+                delete newScene[address[0]][address[1]];
+                break;
+            case 1: 
+                delete newScene[address[0]];
+                break;
+            case 0:
+                break;
+        }
+
+        this.setState({ scene: newScene });
+
+        window.scene.load(createObjectURL(this.getYAML()));
+    }
+
     getYAML() {
         let options = {
-            indent: 4
+            indent: 4,
+            noRefs: true
         };
 
         let yaml_string = "";
@@ -71,20 +110,15 @@ class Snapmap extends React.Component {
         yaml_string += yaml.safeDump( { cameras: { cam: this.state.scene.camera } }, options);
 
         // Add Ligth
-        yaml_string += yaml.safeDump( { 
-            lights: { 
-                dir: { 
-                    type: 'directional',
-                    direction: [.1, .5, -1],
-                    diffuse: .7,
-                    ambient: .5
-                } 
-            } 
-        }, options);
+        yaml_string += yaml.safeDump( { lights: { light: this.state.scene.light } }, options);
 
         // Add Layers.  parse the scene and dump the layers in tangram-YAML form
         let layers = {};
+        let styles = {};
+        let filters = dumpFilters(this.state.scene.filters, styles, imports);
+
         for (let layer in this.state.scene.layers) {
+
             let jsonCnf = this.state.scene.layers[layer];
             let yamlCnf = {
                 data: { source: VECTOR_SOURCE_NAME },
@@ -94,9 +128,19 @@ class Snapmap extends React.Component {
             // Iterate through all the types of possible templates
             for (let template of TEMPLATES) {
                 if (jsonCnf[template].enable) {
-                    yamlCnf.draw['_'+template] = dumpStyle(template, LAYERS_TEMPLATE[layer], jsonCnf, imports);
+                    let lyr_name = '_'+layer+'_'+template;
+
+                    // Construct the layer draw properties 
+                    yamlCnf.draw[lyr_name] = dumpLayer(template, LAYERS_TEMPLATE[layer], jsonCnf, filters);
+
+                    // Construct the custom style properties if it had
+                    let style = dumpStyle(template, LAYERS_TEMPLATE[layer], jsonCnf, imports, filters);
+                    if (style) {
+                        styles[lyr_name] = style;
+                    }
+
                     if (layer === 'buildings' && jsonCnf.extrude) {
-                        yamlCnf.draw['_'+template]['extrude'] = true;
+                        yamlCnf.draw[lyr_name]['extrude'] = true;
                     }
                 }
             }
@@ -107,6 +151,7 @@ class Snapmap extends React.Component {
             layers[layer] = yamlCnf;
         }
         yaml_string += yaml.safeDump( { layers: layers }, options);
+        yaml_string += yaml.safeDump( { styles: styles }, options);
 
         // Add Import
         yaml_string += yaml.safeDump( { import: imports }, options);
@@ -118,7 +163,7 @@ class Snapmap extends React.Component {
 
     render () {
         return (<div>
-                    <MainPanel scene={this.state.scene} update={this.update}/> 
+                    <MainPanel scene={this.state.scene} update={this.update} erase={this.erase}/> 
                     <Map />
                 </div>);
     }
