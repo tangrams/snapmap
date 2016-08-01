@@ -179,4 +179,4 @@ class Snapmap extends React.Component {
 
 ReactDOM.render(<Snapmap />,  document.getElementById('app'));
 
-Map.init('/default.yaml');
+Map.init('./default.yaml');
