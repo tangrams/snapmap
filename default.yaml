@@ -1,0 +1,83 @@
+sources:
+    _mapzen:
+        type: TopoJSON
+        url: https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-6JqNSxo
+cameras:
+    cam:
+        type: perspective
+lights:
+    light:
+        type: directional
+        direction:
+            - 0.1
+            - 0.5
+            - -1
+        ambient: '#878886'
+        diffuse: '#BFC1BE'
+layers:
+    earth:
+        data:
+            source: _mapzen
+        draw:
+            _earth_fill:
+                order: global.order
+                color: '#555'
+                style: polygons
+    water:
+        data:
+            source: _mapzen
+        draw:
+            _water_fill:
+                order: global.order
+                color: '#333'
+                style: polygons
+    boundaries:
+        data:
+            source: _mapzen
+        draw:
+            _boundaries_fill:
+                order: global.order-top
+                color: '#111'
+                width: 1px
+                style: lines
+    landuse:
+        data:
+            source: _mapzen
+        draw:
+            _landuse_fill:
+                order: global.order
+                color: '#666'
+                style: polygons
+    buildings:
+        data:
+            source: _mapzen
+        draw:
+            _buildings_fill:
+                order: global.order
+                color: '#999'
+                style: polygons
+                extrude: true
+    roads:
+        data:
+            source: _mapzen
+        draw:
+            _roads_fill:
+                order: global.order-top
+                color: '#AAA'
+                width: 1px
+                style: lines
+    transit:
+        data:
+            source: _mapzen
+        draw: {}
+    places:
+        data:
+            source: _mapzen
+        draw: {}
+    pois:
+        data:
+            source: _mapzen
+        draw: {}
+styles: {}
+import:
+    - 'https://tangrams.github.io/blocks/global.yaml'

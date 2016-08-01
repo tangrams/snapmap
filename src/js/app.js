@@ -24,6 +24,8 @@ class Snapmap extends React.Component {
         let address = ev.address.split(':');
         let newScene = this.state.scene;
 
+        console.log(ev);
+
         // TODO's:
         //  -   This is ridiculus, should be a better way to do this,
         //      If I only have pointers... 
@@ -156,6 +158,12 @@ class Snapmap extends React.Component {
         // Add Import
         yaml_string += yaml.safeDump( { import: imports }, options);
 
+        if (this.state.scene.layers.water.fill.enable) {
+            yaml_string += yaml.safeDump( { scene: { background: { color: this.state.scene.layers.water.fill.color } } }, options);
+        } else if (this.state.scene.layers.earth.fill.enable) {
+            yaml_string += yaml.safeDump( { scene: { background: { color: this.state.scene.layers.earth.fill.color } } }, options);
+        }
+
         console.log(yaml_string);
         
         return yaml_string;
@@ -171,4 +179,4 @@ class Snapmap extends React.Component {
 
 ReactDOM.render(<Snapmap />,  document.getElementById('app'));
 
-Map.init('https://tangrams.github.io/tangram-sandbox/styles/default.yaml');
+Map.init('/default.yaml');

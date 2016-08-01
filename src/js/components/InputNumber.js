@@ -17,6 +17,7 @@ class InputNumber extends React.Component {
     }
 
     unitChange (ev) {
+        console.log(ev);
         this.props.update({ address: this.props.address+':unit', value: ev} );
     }
 
@@ -34,8 +35,14 @@ class InputNumber extends React.Component {
             <span>
                 <input type='number' style={styles.input} value={this.props.number.value} min='0' max='1000' onChange={this.valueChange}/>
                 <DropdownButton bsSize="xsmall" title={this.props.number.unit} id={`${this.props.address}-unit`} onSelect={this.unitChange}>
-                    {UNITS.map((unit, i) => {
-                        return (<MenuItem key={i} active={(unit === this.props.number.unit)} >{unit}</MenuItem>);
+                    {UNITS.map( (unit) => {
+                        return ( 
+                            <MenuItem 
+                                key={unit} 
+                                eventKey={unit} 
+                                active={(unit === this.props.number.unit)} >
+                                    {unit}
+                            </MenuItem>);
                     })}
                 </DropdownButton>
             </span>
