@@ -176,9 +176,14 @@ function dumpFilters (filters, styles, imports) {
         importBlock(FILTER_BLOCKS[filter], imports);
 
         // Add settings to the FILTER BLOCK
+        styles[name] = { shaders: { defines: {} } };
         for (let prop in jsonCnf) {
-            styles[name] = { shaders: { defines: {} } };
-            styles[name].shaders.defines[prop] = parseFloat(jsonCnf[prop].value);
+            if (jsonCnf[prop].type === 'number' && parseFloat(jsonCnf[prop].value)) {
+                styles[name].shaders.defines[prop] = parseFloat(jsonCnf[prop].value);
+            }
+            else {
+                styles[name].shaders.defines[prop] = jsonCnf[prop].value;
+            }
         }
 
         rta.push(name);
