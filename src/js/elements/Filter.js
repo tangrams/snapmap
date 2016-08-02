@@ -19,17 +19,23 @@ class Filter extends React.Component {
 
         this.delFilter = this.delFilter.bind(this);
         this.valueChange = this.valueChange.bind(this);
+        this.selectChange = this.selectChange.bind(this);
     }
 
-    delFilter (ev) {
+    delFilter (event) {
         this.props.erase({ address: this.props.address });
     }
 
-    valueChange (ev) {
-        let address = ev.target.getAttribute('data-address')+':value';
-        let value = ev.target.value;
+    valueChange (event) {
+        let address = event.target.getAttribute('data-address')+':value';
         // console.log(ev, address, value);
-        this.props.update({ address: address, value: value });
+        this.props.update({ address: address, value: event.target.value });
+    }
+
+    selectChange (eventKey, event) {
+        let address = event.target.getAttribute('data-address')+':value';
+        // console.log('selectChange', eventKey, event, address);
+        this.props.update({ address: address, value: eventKey });
     }
 
     render () {
@@ -61,7 +67,7 @@ class Filter extends React.Component {
                         if (result.type === 'number') {
                             return (
                                 <div style={styles.input_container} key={key}>
-                                    <span  className='element_label'>{result.label}</span>
+                                    <span  className='element_label'>{result.label}:&ensp;</span>
                                     <input  type='number' 
                                             data-address={this.props.address+':'+key} 
                                             style={styles.input} 
@@ -70,6 +76,25 @@ class Filter extends React.Component {
                                             max={parseFloat(result.range.max)}
                                             step={parseFloat(result.range.step)}
                                             onChange={this.valueChange}/>
+                                </div>);
+                        }
+                        else if (result.type === 'dropdown') {
+                            return (
+                                <div style={styles.input_container} key={key}>
+                                    <span className='element_label'>{result.label}:&ensp;</span>
+                                    <DropdownButton 
+                                        bsSize='xsmall' 
+                                        title={result.value}
+                                        onSelect={this.selectChange}>
+                                        { result.values.map( (val) => {
+                                            return <MenuItem 
+                                                    key={val}
+                                                    eventKey={val}
+                                                    data-address={this.props.address+':'+key} 
+                                                    active={(val === result.value)}>{val}</MenuItem>
+                                            }) 
+                                        }
+                                    </DropdownButton>
                                 </div>);
                         }
                     }) }

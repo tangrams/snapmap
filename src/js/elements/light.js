@@ -12,11 +12,11 @@ class Light extends React.Component {
         return (
             <div>
                 <div>
-                    <span className='element_label'>Ambient:</span>
+                    <span className='element_label'>Ambient:&ensp;</span>
                     <ButtonColor color={this.props.config.ambient} address={this.props.address+':ambient'} update={this.props.update}/>
                 </div>
                 <div>
-                    <span className='element_label'>Diffuse:</span>
+                    <span className='element_label'>Diffuse:&ensp;</span>
                     <ButtonColor color={this.props.config.diffuse} address={this.props.address+':diffuse'} update={this.props.update}/>
                 </div>
             </div>

@@ -37,7 +37,7 @@ class Layer extends React.Component {
                 <Panel collapsible expanded={this.state.open}>
                     { this.props.name === 'buildings' &&
                         <div> 
-                            <span className='element_label'> Extrude:</span>
+                            <span className='element_label'> Extrude:&ensp;</span>
                             <ButtonToggle value={this.props.config.extrude} address={this.props.address+':extrude'} update={this.props.update}/>
                         </div>
                     }

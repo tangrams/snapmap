@@ -501,9 +501,6 @@ export const FILTER_BLOCKS = {
     'grid': {
         url: 'https://tangrams.github.io/blocks/filter/grid.yaml'
     },
-    'hatch': {
-        url: 'https://tangrams.github.io/blocks/filter/hatch.yaml'
-    },
     'height': {
         url: 'https://tangrams.github.io/blocks/filter/height.yaml'
     },

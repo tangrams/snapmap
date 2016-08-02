@@ -32,11 +32,11 @@ class Polygon extends React.Component {
                 </div>
                 <Panel collapsible expanded={this.props.config.enable}>
                     <div>
-                        <span className='element_label'>Color:</span>
+                        <span className='element_label'>Color:&ensp;</span>
                         <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
                     </div>
                     <div>
-                        <span className='element_label'>Size:</span>
+                        <span className='element_label'>Size:&ensp;</span>
                         <InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/>
                     </div>
                 </Panel>

@@ -21,7 +21,7 @@ class Camera extends React.Component {
     render () {
         return (
             <div>
-                <span className='element_label'>type:</span>
+                <span className='element_label'>type:&ensp;</span>
                 <DropdownButton bsSize='xsmall' title={this.props.config.type} id={`${this.props.address}:type`} onSelect={this.typeChange}>
                     { CAMERA_TYPES.map( (type) => {
                         return <MenuItem 

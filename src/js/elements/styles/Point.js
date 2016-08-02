@@ -38,15 +38,15 @@ class Polygon extends React.Component {
                 </div>
                 <Panel collapsible expanded={this.props.config.enable}>
                     <div>
-                        <span className='element_label'>Color:</span>
+                        <span className='element_label'>Color:&ensp;</span>
                         <ButtonColor color={this.props.config.color} address={this.props.address+':color'} update={this.props.update}/>
                     </div>
                     <div>
-                        <span className='element_label'>Size:</span>
+                        <span className='element_label'>Size:&ensp;</span>
                         <InputNumber number={this.props.config.size} address={this.props.address+':size'} update={this.props.update}/>
                     </div>
                     <div>
-                        <span className='element_label'>Style:</span>
+                        <span className='element_label'>Style:&ensp;</span>
                         <DropdownButton bsSize="xsmall" title={this.props.config.style} id={`${this.props.name}-style`} onSelect={this.styleChange}>
                             { mapObject(STYLE_BLOCKS.points, (style, result) => {
                                 return <MenuItem 
