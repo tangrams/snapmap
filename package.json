@@ -71,7 +71,7 @@
     "react-burger-menu": "^1.9.8",
     "react-color": "^2.2.2",
     "react-dom": "^15.3.0",
-    "whatwg-fetch": "^0.11.0"
+    "whatwg-fetch": "^0.11.1"
   },
   "resolve": {
     "alias": {

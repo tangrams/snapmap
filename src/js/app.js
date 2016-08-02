@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import yaml from 'js-yaml';
-import { VECTOR_SOURCE_NAME, STYLES, TEMPLATES, LAYERS_TEMPLATE, DEFAULT_SCENE } from './const';
-import { createObjectURL, dumpLayer, dumpStyle, dumpFilters } from './tools';
-
+import { DEFAULT_SCENE } from './const';
+import { createObjectURL } from './tools';
+import { dumpScene } from './parser';
 
 // Main Components
 import Map from './Map';
@@ -16,15 +15,18 @@ class Snapmap extends React.Component {
 
         this.state = { scene: DEFAULT_SCENE };
 
+        this.load = this.load.bind(this);
         this.update = this.update.bind(this);
         this.erase = this.erase.bind(this);
+    }
+
+    load (scene) {
+        window.scene.load(createObjectURL(dumpScene(scene || this.state.scene)));
     }
 
     update (ev) {
         let address = ev.address.split(':');
         let newScene = this.state.scene;
-
-        console.log(ev);
 
         // TODO's:
         //  -   This is ridiculus, should be a better way to do this,
@@ -54,14 +56,12 @@ class Snapmap extends React.Component {
 
         this.setState({ scene: newScene });
 
-        window.scene.load(createObjectURL(this.getYAML()));
+        this.load();
     }
 
     erase (ev) {
         let address = ev.address.split(':');
         let newScene = this.state.scene;
-
-        console.log(ev.address, address);
 
         // TODO's:
         //  -   This is ridiculus, should be a better way to do this,
@@ -91,82 +91,7 @@ class Snapmap extends React.Component {
 
         this.setState({ scene: newScene });
 
-        window.scene.load(createObjectURL(this.getYAML()));
-    }
-
-    getYAML() {
-        let options = {
-            indent: 4,
-            noRefs: true
-        };
-
-        let yaml_string = "";
-        let imports = [...this.state.scene.import];
-
-        // Add Source
-        let sources = {};
-        sources[VECTOR_SOURCE_NAME] = this.state.scene.sources.vector_tiles;
-        yaml_string += yaml.safeDump( { sources: sources }, options);
-
-        // Add Cameras
-        yaml_string += yaml.safeDump( { cameras: { cam: this.state.scene.camera } }, options);
-
-        // Add Ligth
-        yaml_string += yaml.safeDump( { lights: { light: this.state.scene.light } }, options);
-
-        // Add Layers.  parse the scene and dump the layers in tangram-YAML form
-        let layers = {};
-        let styles = {};
-        let filters = dumpFilters(this.state.scene.filters, styles, imports);
-
-        for (let layer in this.state.scene.layers) {
-
-            let jsonCnf = this.state.scene.layers[layer];
-            let yamlCnf = {
-                data: { source: VECTOR_SOURCE_NAME },
-                draw: { }
-            }
-
-            // Iterate through all the types of possible templates
-            for (let template of TEMPLATES) {
-                if (jsonCnf[template].enable) {
-                    let lyr_name = '_'+layer+'_'+template;
-
-                    // Construct the layer draw properties 
-                    yamlCnf.draw[lyr_name] = dumpLayer(template, LAYERS_TEMPLATE[layer], jsonCnf, filters);
-
-                    // Construct the custom style properties if it had
-                    let style = dumpStyle(template, LAYERS_TEMPLATE[layer], jsonCnf, imports, filters);
-                    if (style) {
-                        styles[lyr_name] = style;
-                    }
-
-                    if (layer === 'buildings' && jsonCnf.extrude) {
-                        yamlCnf.draw[lyr_name]['extrude'] = true;
-                    }
-                }
-            }
-
-            // TODO:
-            //    - FILTERS
-
-            layers[layer] = yamlCnf;
-        }
-        yaml_string += yaml.safeDump( { layers: layers }, options);
-        yaml_string += yaml.safeDump( { styles: styles }, options);
-
-        // Add Import
-        yaml_string += yaml.safeDump( { import: imports }, options);
-
-        if (this.state.scene.layers.water.fill.enable) {
-            yaml_string += yaml.safeDump( { scene: { background: { color: this.state.scene.layers.water.fill.color } } }, options);
-        } else if (this.state.scene.layers.earth.fill.enable) {
-            yaml_string += yaml.safeDump( { scene: { background: { color: this.state.scene.layers.earth.fill.color } } }, options);
-        }
-
-        console.log(yaml_string);
-        
-        return yaml_string;
+        this.load();
     }
 
     render () {
@@ -177,6 +102,6 @@ class Snapmap extends React.Component {
     }
 }
 
-ReactDOM.render(<Snapmap />,  document.getElementById('app'));
+ReactDOM.render(<Snapmap/>,  document.getElementById('app'));
 
 Map.init('./default.yaml');

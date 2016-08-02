@@ -1,5 +1,3 @@
-
-export const VECTOR_SOURCE_NAME = '_mapzen';
 export const VECTOR_SOURCE_TYPE = 'TopoJSON';
 export const VECTOR_SOURCE_API_KEY = 'vector-tiles-6JqNSxo';
 export const VECTOR_SOURCE_URL = 'https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson';
@@ -176,7 +174,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         water: {
             fill: {
@@ -204,7 +202,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         boundaries: {
             fill: {
@@ -236,7 +234,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         landuse: {
             fill: {
@@ -264,7 +262,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         buildings: {
             fill: {
@@ -293,7 +291,7 @@ export const DEFAULT_SCENE = {
                 weight: 100
             },
             extrude: true,
-            filters: []
+            kinds: {}
         },
         roads: {
             fill: {
@@ -325,7 +323,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         transit: {
             fill: {
@@ -357,7 +355,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         places: {
             fill: {
@@ -389,7 +387,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         },
         pois: {
             fill: {
@@ -421,7 +419,7 @@ export const DEFAULT_SCENE = {
                 family: 'helvetica',
                 weight: 100
             },
-            filters: []
+            kinds: {}
         }
     }
 };
