@@ -1,5 +1,5 @@
 import yaml from 'js-yaml';
-import { STYLES, TEMPLATES, LAYERS_TEMPLATE, STYLE_BLOCKS, FILTER_BLOCKS } from './const';
+import { TEMPLATES, LAYERS_TEMPLATE, STYLE_BLOCKS, FILTER_BLOCKS } from './const';
 
 const VECTOR_SOURCE_NAME = '_mapzen';
 const CAMERA_NAME = '_camera';
@@ -85,16 +85,17 @@ export function dumpScene (scene) {
     yaml_string += yaml.safeDump( { cameras: cameras }, options);
     yaml_string += yaml.safeDump( { lights: lights }, options);
     yaml_string += yaml.safeDump( { layers: layers }, options);
-    yaml_string += yaml.safeDump( { styles: styles }, options);
 
+    if (Object.keys(styles).length !== 0) {
+        yaml_string += yaml.safeDump( { styles: styles }, options);
+    }
+    
     if (scene.layers.water.fill.enable) {
         yaml_string += yaml.safeDump( { scene: { background: { color: scene.layers.water.fill.color } } }, options);
     } else if (scene.layers.earth.fill.enable) {
         yaml_string += yaml.safeDump( { scene: { background: { color: scene.layers.earth.fill.color } } }, options);
     }
 
-    console.log(yaml_string);
-    
     return yaml_string;
 }
 
@@ -170,22 +171,41 @@ function dumpStyle (type, template, config, imports, filters) {
 function dumpFilters (filters, styles, imports) {
     let rta = [];
     for (let filter in filters) {
-        let jsonCnf = filters[filter];
         let name = 'filter-'+filter;
 
         importBlock(FILTER_BLOCKS[filter], imports);
 
-        // Add settings to the FILTER BLOCK
-        styles[name] = { shaders: { defines: {} } };
-        for (let prop in jsonCnf) {
-            if (jsonCnf[prop].type === 'number' && parseFloat(jsonCnf[prop].value)) {
-                styles[name].shaders.defines[prop] = parseFloat(jsonCnf[prop].value);
+        if (!styles[name]) {
+            styles[name] = { 
+                shaders: { 
+                    uniforms: {}, 
+                    defines: {} 
+                } 
+            };            
+        } 
+       
+        if (filters[filter].shaders) {
+            let defines = filters[filter].shaders.defines || {};
+            for (let define in defines) {
+                if (defines[define].type === 'number' && parseFloat(defines[define].value)) {
+                    styles[name].shaders.defines[define] = parseFloat(defines[define].value);
+                }
+                else {
+                    styles[name].shaders.defines[define] = defines[define].value;
+                }
             }
-            else {
-                styles[name].shaders.defines[prop] = jsonCnf[prop].value;
+
+            let uniforms = filters[filter].shaders.uniforms || {};
+            for (let uniform in uniforms) {
+                if (uniforms[uniform].type === 'number' && parseFloat(uniforms[uniform].value)) {
+                    styles[name].shaders.uniforms[uniform] = parseFloat(uniforms[uniform].value);
+                }
+                else {
+                    styles[name].shaders.uniforms[uniform] = uniforms[uniform].value;
+                }
             }
         }
-
+        
         rta.push(name);
     }
     return rta;

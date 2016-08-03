@@ -36,6 +36,7 @@ class MainPanel extends React.Component {
     render () {
         return (
             <Menu noOverlay>
+                {this.props.children}
                 <Nav>
                     <SubPanel name='Camera:'>
                         <Camera address='camera' config={this.props.scene.camera} update={this.props.update}/>

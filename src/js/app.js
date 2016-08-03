@@ -4,10 +4,14 @@ import ReactDOM from 'react-dom';
 import { DEFAULT_SCENE } from './const';
 import { createObjectURL } from './tools';
 import { dumpScene } from './parser';
+import { saveAs } from './vendor/FileSaver.min.js';
 
 // Main Components
 import Map from './Map';
 import MainPanel from './MainPanel';
+
+import Button from 'react-bootstrap/lib/Button';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 class Snapmap extends React.Component {
     constructor (props) {
@@ -15,13 +19,26 @@ class Snapmap extends React.Component {
 
         this.state = { scene: DEFAULT_SCENE };
 
+        this.new = this.new.bind(this);
         this.load = this.load.bind(this);
+        this.export = this.export.bind(this);
         this.update = this.update.bind(this);
         this.erase = this.erase.bind(this);
     }
 
+    new () {
+        this.load(DEFAULT_SCENE);
+    }
+
     load (scene) {
+        this.setState({ scene: scene });
         window.scene.load(createObjectURL(dumpScene(scene || this.state.scene)));
+    }
+
+    export () {
+        const typedArray = dumpScene(this.state.scene);
+        const blob = new Blob([typedArray], { type: 'text/plain;charset=utf-8' });
+        saveAs(blob, 'scene.yaml');
     }
 
     update (ev) {
@@ -53,10 +70,7 @@ class Snapmap extends React.Component {
             case 0:
                 break;
         }
-
-        this.setState({ scene: newScene });
-
-        this.load();
+        this.load(newScene);
     }
 
     erase (ev) {
@@ -88,15 +102,22 @@ class Snapmap extends React.Component {
             case 0:
                 break;
         }
-
-        this.setState({ scene: newScene });
-
-        this.load();
+        
+        this.load(newScene);
     }
 
     render () {
         return (<div>
-                    <MainPanel scene={this.state.scene} update={this.update} erase={this.erase}/> 
+                    <MainPanel scene={this.state.scene} update={this.update} erase={this.erase}>
+                        <Button bsStyle='default'
+                            onClick={this.new}>
+                            <Glyphicon glyph='file'/>
+                        </Button>
+                        <Button bsStyle='default'
+                            onClick={this.export}>
+                            <Glyphicon glyph='download-alt'/>
+                        </Button>
+                    </MainPanel>
                     <Map />
                 </div>);
     }
