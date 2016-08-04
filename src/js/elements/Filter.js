@@ -26,9 +26,6 @@ class Filter extends React.Component {
     }
 
     render () {
-        const defines = (this.props.config.shaders && this.props.config.shaders.defines) || {};
-        const uniforms = (this.props.config.shaders && this.props.config.shaders.uniforms) || {};
-
         return (
             <div>
                 <div className='element_type' onClick={()=> this.setState({ open: !this.state.open })}>
@@ -40,10 +37,10 @@ class Filter extends React.Component {
                     </Button>
                 </div>
                 <Panel collapsible expanded={this.state.open}>
-                    {mapObject(defines, (key, result) => {
+                    {mapObject((this.props.config.shaders && this.props.config.shaders.defines) || {}, (key, result) => {
                         return <UiBlockElement address={this.props.address+':shaders:defines:'+key} key={key} config={result} update={this.props.update}/>
                     })}
-                    {mapObject(uniforms, (key, result) => {
+                    {mapObject((this.props.config.shaders && this.props.config.shaders.uniforms) || {}, (key, result) => {
                         return <UiBlockElement address={this.props.address+':shaders:uniforms:'+key} key={key} config={result} update={this.props.update}/>
                     })}
                 </Panel>

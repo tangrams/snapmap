@@ -19,18 +19,18 @@ class Snapmap extends React.Component {
 
         this.state = { scene: DEFAULT_SCENE };
 
-        this.new = this.new.bind(this);
-        this.load = this.load.bind(this);
+        this.newStyle = this.newStyle.bind(this);
+        this.loadStyle = this.loadStyle.bind(this);
         this.export = this.export.bind(this);
         this.update = this.update.bind(this);
         this.erase = this.erase.bind(this);
     }
 
-    new () {
-        this.load(DEFAULT_SCENE);
+    newStyle () {
+        this.loadStyle(DEFAULT_SCENE);
     }
 
-    load (scene) {
+    loadStyle (scene) {
         this.setState({ scene: scene });
         window.scene.load(createObjectURL(dumpScene(scene || this.state.scene)));
     }
@@ -49,6 +49,18 @@ class Snapmap extends React.Component {
         //  -   This is ridiculus, should be a better way to do this,
         //      If I only have pointers... 
         switch (address.length) {
+            case 10:
+                newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]][address[6]][address[7]][address[8]][address[9]] = ev.value;
+                break;
+            case 9:
+                newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]][address[6]][address[7]][address[8]] = ev.value;
+                break;
+            case 8:
+                newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]][address[6]][address[7]] = ev.value;
+                break;
+            case 7:
+                newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]][address[6]] = ev.value;
+                break;
             case 6:
                 newScene[address[0]][address[1]][address[2]][address[3]][address[4]][address[5]] = ev.value;
                 break;
@@ -70,7 +82,7 @@ class Snapmap extends React.Component {
             case 0:
                 break;
         }
-        this.load(newScene);
+        this.loadStyle(newScene);
     }
 
     erase (ev) {
@@ -103,14 +115,14 @@ class Snapmap extends React.Component {
                 break;
         }
         
-        this.load(newScene);
+        this.loadStyle(newScene);
     }
 
     render () {
         return (<div>
                     <MainPanel scene={this.state.scene} update={this.update} erase={this.erase}>
                         <Button bsStyle='default'
-                            onClick={this.new}>
+                            onClick={this.newStyle}>
                             <Glyphicon glyph='file'/>
                         </Button>
                         <Button bsStyle='default'

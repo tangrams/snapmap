@@ -40,6 +40,8 @@ class UiBlockElement extends React.Component {
             }
         };
 
+        let value = this.props.config.value || this.props.config.default_value;
+
         if (this.props.config.type === 'number') {
             return (
                 <div style={styles.input_container}>
@@ -47,7 +49,7 @@ class UiBlockElement extends React.Component {
                     <input  type='number' 
                             data-address={this.props.address} 
                             style={styles.input} 
-                            value={parseFloat(this.props.config.value)} 
+                            value={parseFloat(value)} 
                             min={parseFloat(this.props.config.range.min)} 
                             max={parseFloat(this.props.config.range.max)}
                             step={parseFloat(this.props.config.range.step)}
@@ -61,14 +63,14 @@ class UiBlockElement extends React.Component {
                     <span className='element_label'>{this.props.config.label}:&ensp;</span>
                     <DropdownButton 
                         bsSize='xsmall' 
-                        title={this.props.config.value}
+                        title={value}
                         onSelect={this.selectChange}>
                         { this.props.config.values.map( (val) => {
                             return <MenuItem 
                                     key={val}
                                     eventKey={val}
                                     data-address={this.props.address} 
-                                    active={(val === this.props.config.value)}>{val}</MenuItem>
+                                    active={(val === value)}>{val}</MenuItem>
                             }) 
                         }
                     </DropdownButton>
@@ -77,7 +79,6 @@ class UiBlockElement extends React.Component {
         }
         else if (this.props.config.type === 'dropdownList') {
             const values = this.props.config.values;
-            const value = this.props.config.value;
             const labelValue = keyWithValue(values,value);
             return (
                 <div style={styles.input_container}>

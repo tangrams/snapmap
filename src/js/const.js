@@ -152,11 +152,13 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#555',
+                style_conf: {},
                 style: 'none'
             },
             border: {
                 enable: false,
                 color: '#666',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -180,11 +182,13 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#333',
+                style_conf: {},
                 style: 'none'
             },
             border: {
                 enable: false,
                 color: '#444',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -208,15 +212,17 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#111',
+                style_conf: {},
+                style: 'none',
                 width: { 
                     value: 1,
                     unit: 'px'
-                },
-                style: 'none'
+                }
             },
             border: {
                 enable: false,
                 color: '#FFF',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -240,11 +246,13 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#666',
+                style_conf: {},
                 style: 'none'
             },
             border: {
                 enable: false,
                 color: '#777',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -268,11 +276,13 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#999',
+                style_conf: {},
                 style: 'none'
             },
             border: {
                 enable: false,
                 color: '#AAA',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -306,6 +316,7 @@ export const DEFAULT_SCENE = {
             border: {
                 enable: false,
                 color: '#222',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
@@ -329,21 +340,22 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: false,
                 color: '#888',
-                width: { 
-                    value: 1,
-                    unit: 'px'
-                },
-                style: 'none'
-            },
-            border: {
-                enable: false,
-                color: '#AAA',
+                style_conf: {},
                 style: 'none',
                 width: { 
                     value: 1,
                     unit: 'px'
-                },
-                style: 'none'
+                }
+            },
+            border: {
+                enable: false,
+                color: '#AAA',
+                style_conf: {},
+                style: 'none',
+                width: { 
+                    value: 1,
+                    unit: 'px'
+                }
             },
             label: {
                 enable: false,
@@ -361,21 +373,22 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: false,
                 color: '#FFF',
-                size: { 
-                    value: 1,
-                    unit: 'px'
-                },
-                style: 'none'
-            },
-            border: {
-                enable: false,
-                color: '#000',
+                style_conf: {},
                 style: 'none',
                 size: { 
                     value: 1,
                     unit: 'px'
-                },
-                style: 'none'
+                }
+            },
+            border: {
+                enable: false,
+                color: '#000',
+                style_conf: {},
+                style: 'none',
+                size: { 
+                    value: 1,
+                    unit: 'px'
+                }
             },
             label: {
                 enable: false,
@@ -393,21 +406,22 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: false,
                 color: '#FFF',
-                size: { 
-                    value: 1,
-                    unit: 'px'
-                },
-                style: 'none'
-            },
-            border: {
-                enable: false,
-                color: '#000',
+                style_conf: {},
                 style: 'none',
                 size: { 
                     value: 1,
                     unit: 'px'
-                },
-                style: 'none'
+                }
+            },
+            border: {
+                enable: false,
+                color: '#000',
+                style_conf: {},
+                style: 'none',
+                size: { 
+                    value: 1,
+                    unit: 'px'
+                }
             },
             label: {
                 enable: false,
@@ -421,93 +435,5 @@ export const DEFAULT_SCENE = {
             },
             kinds: {}
         }
-    }
-};
-
-export const STYLE_BLOCKS = { 
-    polygons: {
-        'none': {
-            url: ''
-        },
-        'diagonal-grid': {
-            url: 'https://tangrams.github.io/blocks/polygons/diagonal-grid.yaml'
-        },
-        'diagonal-stripes': {
-            url: 'https://tangrams.github.io/blocks/polygons/diagonal-stripes.yaml'
-        },
-        'dots': {
-            url: 'https://tangrams.github.io/blocks/polygons/dots.yaml'
-        },
-        'glass-walls': {
-            url: 'https://tangrams.github.io/blocks/polygons/glass-walls.yaml'
-        },
-        'pixelate': {
-            url: 'https://tangrams.github.io/blocks/polygons/pixelate.yaml'
-        },
-        'shimmering': {
-            url: 'https://tangrams.github.io/blocks/polygons/shimmering.yaml'
-        },
-        'stripes': {
-            url: 'https://tangrams.github.io/blocks/polygons/stripes.yaml'
-        },
-        'windows': {
-            url: 'https://tangrams.github.io/blocks/polygons/windows.yaml'
-        }
-    }, 
-    lines : {
-        'none': {
-            url: ''
-        },
-        'chevron': {
-            url: 'https://tangrams.github.io/blocks/lines/chevron.yaml'
-        },
-        'dash': {
-            url: 'https://tangrams.github.io/blocks/lines/dash.yaml'
-        },
-        'dots': {
-            url: 'https://tangrams.github.io/blocks/lines/dots.yaml'
-        },
-        'glow': {
-            url: 'https://tangrams.github.io/blocks/lines/glow.yaml'
-        },
-        'outline': {
-            url: 'https://tangrams.github.io/blocks/lines/outline.yaml'
-        },
-        'rainbow': {
-            url: 'https://tangrams.github.io/blocks/lines/rainbow.yaml'
-        },
-        'stripes': {
-            url: 'https://tangrams.github.io/blocks/lines/stripes.yaml'
-        }
-    }, 
-    points: {
-        'none': {
-            url: ''
-        },
-        'cross': {
-            url: 'https://tangrams.github.io/blocks/points/cross.yaml'
-        },
-        'shape': {
-            url: 'https://tangrams.github.io/blocks/points/shape.yaml'
-        }
-    }, 
-    text: {}
-};
-
-export const FILTER_BLOCKS = {
-    'grain': {
-        url: 'https://tangrams.github.io/blocks/filter/grain.yaml'
-    },
-    'grid': {
-        url: 'https://tangrams.github.io/blocks/filter/grid.yaml'
-    },
-    'height': {
-        url: 'https://tangrams.github.io/blocks/filter/height.yaml'
-    },
-    'lut': {
-        url: 'https://tangrams.github.io/blocks/filter/lut.yaml'
-    },
-    'tv': {
-        url: 'https://tangrams.github.io/blocks/filter/tv.yaml'
     }
 };

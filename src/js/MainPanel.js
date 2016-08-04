@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { mapObject } from './tools.js';
-import { FILTER_BLOCKS } from './const.js';
-import { getBlockSetup } from './blocks.js';
+import { FILTER_BLOCKS, parseBlock } from './blocks.js';
 
 // Tangram "elements"
 import Layer from './elements/Layer';
@@ -28,8 +27,8 @@ class MainPanel extends React.Component {
     }
 
     filterAdded (ev) {
-        getBlockSetup('filter-'+ev, FILTER_BLOCKS[ev].url, (setup) => {
-            this.props.update({ address: 'filters:'+ev , value: setup });
+        parseBlock('filter', ev, (block) => {
+            this.props.update({ address: 'filters:'+ev , value: block });
         })
     }
 

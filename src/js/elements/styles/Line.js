@@ -1,6 +1,6 @@
 import React from 'react';
 import { mapObject } from '../../tools.js';
-import { STYLE_BLOCKS } from '../../const.js';
+import { STYLE_BLOCKS } from '../../blocks.js';
 
 // Bootstrap components
 import Panel from 'react-bootstrap/lib/Panel';

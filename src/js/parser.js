@@ -1,5 +1,6 @@
 import yaml from 'js-yaml';
-import { TEMPLATES, LAYERS_TEMPLATE, STYLE_BLOCKS, FILTER_BLOCKS } from './const';
+import { TEMPLATES, LAYERS_TEMPLATE } from './const';
+import { dumpStyleBlock, dumpFilterBlocks } from './blocks';
 
 const VECTOR_SOURCE_NAME = '_mapzen';
 const CAMERA_NAME = '_camera';
@@ -38,7 +39,7 @@ export function dumpScene (scene) {
 
     // STYLES
     let styles = {}; // Custom styles for layers that need it
-    let filters = dumpFilters(scene.filters, styles, imports);
+    let filters = dumpFilterBlocks(scene.filters, styles, imports);
 
     // For each layer...
     for (let layer in scene.layers) {
@@ -51,9 +52,12 @@ export function dumpScene (scene) {
         }
 
         //  Each layer can have three different templates (fill, border or label)
+        let shouldBeAdd = false;
         for (let template of TEMPLATES) {
             // If is enabled 
             if (jsonCnf[template].enable) {
+                shouldBeAdd = true;
+
                 // layer name use for the sub layer and custom style if needed
                 let lyr_name = '_'+layer+'_'+template;
 
@@ -61,7 +65,7 @@ export function dumpScene (scene) {
                 yamlCnf.draw[lyr_name] = dumpDraw(template, LAYERS_TEMPLATE[layer][template], jsonCnf, filters);
 
                 // Construct the custom style properties if needed
-                let style = dumpStyle(template, LAYERS_TEMPLATE[layer][template], jsonCnf, imports, filters);
+                let style = dumpStyleBlock(template, LAYERS_TEMPLATE[layer][template], jsonCnf, imports, filters);
                 if (style) {
                     styles[lyr_name] = style;
                 }
@@ -73,7 +77,9 @@ export function dumpScene (scene) {
             }
         }
 
-        layers[layer] = yamlCnf;
+        if (shouldBeAdd) {
+            layers[layer] = yamlCnf;
+        }
     }
 
     // Tamgram scene logical structure 
@@ -87,6 +93,7 @@ export function dumpScene (scene) {
     yaml_string += yaml.safeDump( { layers: layers }, options);
 
     if (Object.keys(styles).length !== 0) {
+        console.log(styles);
         yaml_string += yaml.safeDump( { styles: styles }, options);
     }
     
@@ -112,7 +119,7 @@ function dumpDraw (type, template, config, filters) {
         };
 
         // TODO: 
-        //  - Add fonts
+        //  - Add fonts family, weight, and stroke
     }
     else {
 
@@ -138,84 +145,4 @@ function dumpDraw (type, template, config, filters) {
     }
 
     return rta;
-}
-
-// Construct a Style structer according to a template type and the config type
-function dumpStyle (type, template, config, imports, filters) {    
-    if (config[type].style && config[type].style !== 'none') {
-        importBlock(STYLE_BLOCKS[template.style][config[type].style], imports);
-
-        let rta = {
-            base: template.style,
-            mix: [template.style + '-' + config[type].style, ...filters]
-        };
-
-        // TODO:
-        // - custom STYLE step up
-        return rta;
-    }
-    else {
-        if (filters.length > 0) {
-            return {
-                base: template.style,
-                mix: filters
-            }
-        } 
-        else {
-            return undefined;
-        }
-    }
-}
-
-// Insert filters styles and imports together with the custom configuration
-function dumpFilters (filters, styles, imports) {
-    let rta = [];
-    for (let filter in filters) {
-        let name = 'filter-'+filter;
-
-        importBlock(FILTER_BLOCKS[filter], imports);
-
-        if (!styles[name]) {
-            styles[name] = { 
-                shaders: { 
-                    uniforms: {}, 
-                    defines: {} 
-                } 
-            };            
-        } 
-       
-        if (filters[filter].shaders) {
-            let defines = filters[filter].shaders.defines || {};
-            for (let define in defines) {
-                if (defines[define].type === 'number' && parseFloat(defines[define].value)) {
-                    styles[name].shaders.defines[define] = parseFloat(defines[define].value);
-                }
-                else {
-                    styles[name].shaders.defines[define] = defines[define].value;
-                }
-            }
-
-            let uniforms = filters[filter].shaders.uniforms || {};
-            for (let uniform in uniforms) {
-                if (uniforms[uniform].type === 'number' && parseFloat(uniforms[uniform].value)) {
-                    styles[name].shaders.uniforms[uniform] = parseFloat(uniforms[uniform].value);
-                }
-                else {
-                    styles[name].shaders.uniforms[uniform] = uniforms[uniform].value;
-                }
-            }
-        }
-        
-        rta.push(name);
-    }
-    return rta;
-}
-
-// If the block was a url and is new add it to the the imports
-function importBlock(block, imports) {
-    if (block && block.url && block.url !== '') {
-        if (imports.indexOf(block.url) === -1 ) {
-            imports.push(block.url);
-        }
-    }
 }
