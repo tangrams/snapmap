@@ -1,6 +1,9 @@
 import React from 'react';
 import { mapObject } from '../../tools.js';
-import { STYLE_BLOCKS } from '../../blocks.js';
+import { STYLE_BLOCKS, parseBlock } from '../../blocks.js';
+
+// Element
+import UiBlockElement from '../UiBlockElement'
 
 // Bootstrap components
 import Panel from 'react-bootstrap/lib/Panel';
@@ -21,6 +24,10 @@ class Polygon extends React.Component {
 
     styleChange (ev) {
         this.props.update({ address: this.props.address+':style' , value: ev});
+
+        parseBlock('lines', ev, (block) => {
+            this.props.update({ address: this.props.address+':style_conf', value: block });
+        })
     }
 
     render () {
@@ -55,6 +62,14 @@ class Polygon extends React.Component {
                                         active={(style === this.props.config.style)}>{style}</MenuItem>
                             }) }
                         </DropdownButton>
+                    </div>
+                    <div>
+                        {mapObject((this.props.config.style_conf.shaders && this.props.config.style_conf.shaders.defines) || {}, (key, result) => {
+                            return <UiBlockElement address={this.props.address+':style_conf:shaders:defines:'+key} key={key} config={result} update={this.props.update}/>
+                        })}
+                        {mapObject((this.props.config.style_conf.shaders && this.props.config.style_conf.shaders.uniforms) || {}, (key, result) => {
+                            return <UiBlockElement address={this.props.address+':style_conf:shaders:uniforms:'+key} key={key} config={result} update={this.props.update}/>
+                        })}
                     </div>
                 </Panel>
             </div>

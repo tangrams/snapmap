@@ -93,7 +93,6 @@ export function dumpScene (scene) {
     yaml_string += yaml.safeDump( { layers: layers }, options);
 
     if (Object.keys(styles).length !== 0) {
-        console.log(styles);
         yaml_string += yaml.safeDump( { styles: styles }, options);
     }
     

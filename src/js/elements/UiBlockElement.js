@@ -33,7 +33,6 @@ class UiBlockElement extends React.Component {
             },
             input: {
                 height: '22px',
-                width: '50%',
                 fontSize: '13px',
                 textAlign: 'right',
                 color: 'black'

@@ -307,11 +307,12 @@ export const DEFAULT_SCENE = {
             fill: {
                 enable: true,
                 color: '#AAA',
+                style_conf: {},
+                style: 'none',
                 width: { 
                     value: 1,
                     unit: 'px'
-                },
-                style: 'none'
+                }
             },
             border: {
                 enable: false,

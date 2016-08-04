@@ -101,7 +101,7 @@ export function parseBlock(category, name, callback) {
     }
     else {
         if (STYLE_BLOCKS[category] && STYLE_BLOCKS[category][name]) {
-            url = STYLE_BLOCKS[category][name].url;   
+            url = STYLE_BLOCKS[category][name].url; 
         }
     }
 
